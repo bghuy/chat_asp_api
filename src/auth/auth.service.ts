@@ -18,12 +18,12 @@ export class AuthService {
                     email
                 }
             });
-            if(!existingUser) {
+            if(!existingUser) { 
                 throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
             }
             const isSamePassword = await comparePassword(password, existingUser.password);
             if(isSamePassword) {
-                const {password,emailVerified, ...user} = existingUser;
+                const {password, ...user} = existingUser;
                 return {
                     access_token: this.jwtService.sign({user}),
                     refresh_token: this.jwtService.sign(
@@ -75,21 +75,29 @@ export class AuthService {
     }
 
     async validateGoogleUser(userDetails: GoogleUserDetails) {
-        const existingUser = await this.prisma.user.findUnique({
-            where: {
-                email: userDetails.email
+        try {
+            const existingUser = await this.prisma.user.findUnique({
+                where: {
+                    email: userDetails.email
+                }
+            })
+            if(!existingUser) { 
+                throw new HttpException(ErrorType.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
-        })
-        if(existingUser) {
-            return existingUser;
+            const {password, ...userData} = existingUser;
+            return {
+                access_token: this.jwtService.sign({userData}),
+                refresh_token: this.jwtService.sign(
+                    {userData}, 
+                    {expiresIn: '7d', secret: process.env.JWT_REFRESH_SECRET}
+                ),
+            } 
+        } catch (error) {
+            throw new HttpException(
+                ErrorType.SERVER_INTERNAL_ERROR,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
         }
-        const user = await this.prisma.user.create({
-            data: {
-                email: userDetails.email,
-                name: userDetails.displayName,
-            }
-        })
-        const {password, ...userData} = user;
-        return userData
+
     } 
 }

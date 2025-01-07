@@ -20,7 +20,7 @@ export type UserRegisterType = {
 export type GoogleUserDetails = {
     email: string;
     displayName: string;
+    photos?: { value: string }[];
 }
-
 
 
