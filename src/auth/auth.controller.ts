@@ -1,15 +1,15 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Post, Req, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Roles } from 'src/decorators/roles.decorator';
-import { JwtGuard } from 'src/guards/jwt.guard';
+import { Roles } from './../decorators/roles.decorator';
+import { JwtGuard } from './../guards/jwt.guard';
 import { LocalGuard } from 'src/guards/local.guard';
-import { RefreshTokenGuard } from 'src/guards/refresh-token.guard';
-import { RoleGuard } from 'src/guards/role.guard';
+import { RefreshTokenGuard } from './../guards/refresh-token.guard';
+import { RoleGuard } from './../guards/role.guard';
 import { AuthService } from './auth.service';
 import { signToken } from 'src/utils/jwt';
 import { ErrorType } from 'src/utils/error';
 import { UserRegisterDto } from 'src/dtos/user/UserRegisterDto';
-import { GoogleGuard } from 'src/guards/google.guard';
+import { GoogleGuard } from './../guards/google.guard';
 import { CustomRequest } from 'src/utils/interfaces/request';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -60,7 +60,7 @@ export class AuthController {
             httpOnly: true,
             secure: process.env.SERVER_MODE === 'production',
             maxAge: refreshTokenExpiry || sevenDaysInMs,
-            sameSite: 'none'
+            sameSite: process.env.SERVER_MODE === 'production' ? 'none' : 'strict'
         });
         return res.json({ message: 'Login successful', data: {access_token} });
     } 
