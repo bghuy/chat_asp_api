@@ -7,7 +7,7 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const allowedOrigins = [
-    "https://test-deploy-flax-theta.vercel.app/",
+    "https://test-deploy-flax-theta.vercel.app",
     "http://localhost:3000"
   ];
 
