@@ -6,6 +6,14 @@
         "use": "@vercel/node"
       }
     ],
+    "build": {
+      "env": {
+        "DATABASE_URL": "postgresql://auth-tutorial_owner:kGsJKiPUTA12@ep-bold-glade-a1ex64xo-pooler.ap-southeast-1.aws.neon.tech/auth-tutorial?sslmode=require"
+      },
+      "commands": {
+        "build": "prisma generate && npm run build"
+      }
+    },
     "routes": [
       {
         "src": "/(.*)",
