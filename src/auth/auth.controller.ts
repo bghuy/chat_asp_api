@@ -59,7 +59,7 @@ export class AuthController {
         const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: process.env.SERVER_MODE === 'production',
             maxAge: refreshTokenExpiry || sevenDaysInMs,
             sameSite: 'none'
         });
@@ -97,8 +97,9 @@ export class AuthController {
         const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: refreshTokenExpiry || sevenDaysInMs
+            maxAge: refreshTokenExpiry || sevenDaysInMs,
+            secure: process.env.SERVER_MODE === 'production',
+            sameSite: 'none'
         });
         return res.json({ message: 'Login successful', data: {access_token} });
     }
