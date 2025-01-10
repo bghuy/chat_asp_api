@@ -52,8 +52,7 @@ export class AuthController {
     @Post('login')
     @UseGuards(LocalGuard)
     login(@Req() req: Request , @Res() res: Response) {
-        console.log("hhha");
-        
+        console.log("login");
         const {access_token, refresh_token} = req.user as {access_token: string, refresh_token: string};
         const refreshTokenExpiry = parseInt(process.env.REFRESH_TOKEN_EXPIRY || '0', 10);
         const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000
