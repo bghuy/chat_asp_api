@@ -13,7 +13,7 @@ export class RefreshTokenGuard implements CanActivate {
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token is missing or invalid.');
     }
-    const decoded = await this.jwtService.verifyAsync(refreshToken, { secret: process.env.JWT_REFRESH_SECRET || 'secret' });
+    const decoded = await this.jwtService.verifyAsync(refreshToken, { secret: process.env.JWT_REFRESH_SECRET});
     if(!decoded || !decoded?.user) throw new UnauthorizedException('Refresh token is missing or invalid.');
     request.user = decoded.user;
     return true;
