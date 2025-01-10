@@ -3,8 +3,8 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { AuthService } from "../auth.service";
 import { Profile, Strategy } from "passport-google-oauth20";
-import { PrismaService } from "src/prisma/prisma.service";
-import { ErrorType } from "src/utils/error";
+import { PrismaService } from "./../../prisma/prisma.service";
+import { ErrorType } from "./../../utils/error";
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     constructor(private readonly authService: AuthService, private readonly prisma: PrismaService) {

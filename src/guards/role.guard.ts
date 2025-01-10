@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Request } from "express";
 import { Observable } from "rxjs";
-import { Roles } from "src/decorators/roles.decorator";
+import { Roles } from "./../decorators/roles.decorator";
 
 
 @Injectable()

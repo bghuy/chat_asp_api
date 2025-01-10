@@ -2,16 +2,16 @@ import { Body, Controller, Get, HttpException, HttpStatus, Post, Req, Res, UseGu
 import { Request, Response } from 'express';
 import { Roles } from './../decorators/roles.decorator';
 import { JwtGuard } from './../guards/jwt.guard';
-import { LocalGuard } from 'src/guards/local.guard';
+import { LocalGuard } from './../guards/local.guard';
 import { RefreshTokenGuard } from './../guards/refresh-token.guard';
 import { RoleGuard } from './../guards/role.guard';
 import { AuthService } from './auth.service';
-import { signToken } from 'src/utils/jwt';
-import { ErrorType } from 'src/utils/error';
-import { UserRegisterDto } from 'src/dtos/user/UserRegisterDto';
+import { signToken } from './../utils/jwt';
+import { ErrorType } from './../utils/error';
+import { UserRegisterDto } from './../dtos/user/UserRegisterDto';
 import { GoogleGuard } from './../guards/google.guard';
-import { CustomRequest } from 'src/utils/interfaces/request';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { CustomRequest } from './../utils/interfaces/request';
+import { PrismaService } from './../prisma/prisma.service';
 
 @Controller('auth')
 export class AuthController {

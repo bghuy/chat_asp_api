@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthPayloadParams,GoogleUserDetails,UserRegisterType } from 'src/utils/types/auth';
+import { PrismaService } from './../prisma/prisma.service';
+import { AuthPayloadParams,GoogleUserDetails,UserRegisterType } from './../utils/types/auth';
 import { Prisma } from '@prisma/client';
 import { error } from 'console';
-import { ErrorType } from 'src/utils/error';
-import { comparePassword, hashPassword } from 'src/utils/bcrypt';
+import { ErrorType } from './../utils/error';
+import { comparePassword, hashPassword } from './../utils/bcrypt';
 
 @Injectable()
 export class AuthService {

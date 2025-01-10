@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { jwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { PrismaModule } from './../prisma/prisma.module';
 import { GoogleStrategy } from './strategies/GoogleStrategy';
 @Module({
   imports: [
