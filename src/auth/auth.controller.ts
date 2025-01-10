@@ -52,13 +52,16 @@ export class AuthController {
     @Post('login')
     @UseGuards(LocalGuard)
     login(@Req() req: Request , @Res() res: Response) {
+        console.log("hhha");
+        
         const {access_token, refresh_token} = req.user as {access_token: string, refresh_token: string};
         const refreshTokenExpiry = parseInt(process.env.REFRESH_TOKEN_EXPIRY || '0', 10);
         const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: refreshTokenExpiry || sevenDaysInMs
+            maxAge: refreshTokenExpiry || sevenDaysInMs,
+            sameSite: 'none'
         });
         return res.json({ message: 'Login successful', data: {access_token} });
     } 
