@@ -7,8 +7,8 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const allowedOrigins = [
-    process.env.CLIENT_DEVELOPMENT_URL,
-    process.env.CLIENT_PRODUCTION_URL,
+    "https://test-deploy-flax-theta.vercel.app/",
+    "http://localhost:3000"
   ];
 
   app.enableCors({
