@@ -1,24 +1,57 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
+import { Logger } from '@nestjs/common';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Bootstrap');
+
   app.setGlobalPrefix('api');
-  app.enableCors(
-    {
-      origin: [process.env.CLIENT_PRODUCTION_URL, process.env.CLIENT_DEVELOPMENT_URL],
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      credentials: true,
-    }
-  );
+
+  const allowedOrigins = [
+    process.env.CLIENT_PRODUCTION_URL,
+    process.env.CLIENT_DEVELOPMENT_URL
+  ].filter(Boolean);
+
+  logger.log(`Allowed origins: ${allowedOrigins.join(', ')}`);
+
+  app.enableCors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        logger.warn(`Origin ${origin} not allowed by CORS`);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+    allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
+  });
+
   app.use((req, res, next) => {
+    logger.log(`${req.method} ${req.url}`);
     if (req.method === 'OPTIONS') {
-      res.status(204).send();
+      logger.log('Handling OPTIONS request');
+      res.header('Access-Control-Allow-Origin', allowedOrigins.join(', '));
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,Authorization');
+      res.header('Access-Control-Allow-Credentials', 'true');
+      res.status(204).end();
     } else {
       next();
     }
   });
+
   app.use(cookieParser());
-  await app.listen(process.env.PORT ?? 3000);
+
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  logger.log(`Application is running on: http://localhost:${port}`);
 }
-bootstrap();
+
+bootstrap().catch((error) => {
+  console.error('Failed to start the application:', error);
+});
+
