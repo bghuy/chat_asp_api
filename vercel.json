@@ -1,24 +1,24 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "src/main.ts",
-        "use": "@vercel/node"
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "prisma/schema.prisma",
+          "prisma/**"
+        ]
       }
-    ],
-    "build": {
-      "env": {
-        "DATABASE_URL": "postgresql://auth-tutorial_owner:kGsJKiPUTA12@ep-bold-glade-a1ex64xo-pooler.ap-southeast-1.aws.neon.tech/auth-tutorial?sslmode=require"
-      },
-      "commands": {
-        "build": "prisma generate && npm run build"
-      }
-    },
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "src/main.ts",
-        "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
-      }
-    ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/dist/main.js"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "postgresql://auth-tutorial_owner:kGsJKiPUTA12@ep-bold-glade-a1ex64xo-pooler.ap-southeast-1.aws.neon.tech/auth-tutorial?sslmode=require"
   }
+}
