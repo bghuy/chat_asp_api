@@ -10,7 +10,6 @@ async function bootstrap() {
     credentials: true,
     preflightContinue: true,
   });
-  app.use(cookieParser());
   app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
       res.status(204).send();
@@ -18,6 +17,8 @@ async function bootstrap() {
       next();
     }
   });
+  
+  app.use(cookieParser());
   await app.listen(process.env.PORT ?? 3000);
 }
 
