@@ -63,6 +63,7 @@ export class AuthController {
             maxAge: refreshTokenExpiry || sevenDaysInMs,
             sameSite: process.env.SERVER_MODE === 'production' ? 'none' : 'lax'
         });
+        console.log('Response Headers (Before Sending):', res.getHeaders());
         return res.status(200).json({ message: 'Login successful', data: {access_token} });
     } 
 
