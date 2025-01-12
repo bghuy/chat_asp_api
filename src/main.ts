@@ -1,8 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-// import cookieParser from 'cookie-parser';
+// const cookieParser = require('cookie-parser');
+import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -15,18 +14,6 @@ async function bootstrap() {
     preflightContinue: false,
     allowedHeaders: ['Content-Type', 'Authorization']
   });
-//   app.use(cors({
-//     credentials: true,
-//     origin: (origin, callback) => {
-//         if (allowedOrigins.includes(origin) || !origin) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     },
-// }));
-
-  // Middleware để xử lý các yêu cầu OPTIONS (preflight request)
   app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
       res.status(204).send();
@@ -35,7 +22,7 @@ async function bootstrap() {
     }
   });
 
-  app.use(cookieParser());  // Middleware cho cookie parser
+  app.use(cookieParser());
   await app.listen(process.env.PORT ?? 3000);
 }
 
