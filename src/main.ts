@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: [process.env.CLIENT_PRODUCTION_URL, process.env.CLIENT_DEVELOPMENT_URL],
+    origin: ["https://test-deploy-flax-theta.vercel.app", process.env.CLIENT_DEVELOPMENT_URL],
     methods: "*",
     credentials: true,
     allowedHeaders:"*"
