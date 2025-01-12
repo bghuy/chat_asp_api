@@ -8,30 +8,29 @@ async function bootstrap() {
 
   const allowedOrigins = [process.env.CLIENT_PRODUCTION_URL, process.env.CLIENT_DEVELOPMENT_URL];
 
-  // Cấu hình CORS với logic kiểm tra nguồn tương tự Express
-  // app.enableCors({
-  //   origin: (origin, callback) => {
-  //     if (allowedOrigins.includes(origin) || !origin) {
-  //       // Cho phép yêu cầu từ các nguồn hợp lệ và các yêu cầu không có origin (chẳng hạn như yêu cầu từ localhost trong phát triển)
-  //       callback(null, true);
-  //     } else {
-  //       callback(new Error('Not allowed by CORS'));
-  //     }
-  //   },
-  //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  //   credentials: true,  // Cho phép gửi cookie trong yêu cầu
-  //   preflightContinue: true,
-  // });
-  app.use(cors({
-    credentials: true,
+  app.enableCors({
     origin: (origin, callback) => {
-        if (allowedOrigins.includes(origin) || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    }
-}));
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    credentials: true,
+    preflightContinue: true,
+    allowedHeaders: '*'
+  });
+//   app.use(cors({
+//     credentials: true,
+//     origin: (origin, callback) => {
+//         if (allowedOrigins.includes(origin) || !origin) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+// }));
 
   // Middleware để xử lý các yêu cầu OPTIONS (preflight request)
   app.use((req, res, next) => {
