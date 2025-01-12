@@ -60,7 +60,6 @@ export class AuthController {
             secure: process.env.SERVER_MODE === 'production',
             maxAge: refreshTokenExpiry || sevenDaysInMs,
             sameSite: process.env.SERVER_MODE === 'production' ? 'none' : 'lax',
-            domain: process.env.SERVER_MODE === 'production' ? process.env.CLIENT_PRODUCTION_URL : process.env.CLIENT_DEVELOPMENT_URL
         });
         console.log('Response Headers (Before Sending):', res.getHeaders());
         return res.status(200).json({ message: 'Login successful', data: {access_token} });
@@ -111,7 +110,6 @@ export class AuthController {
             maxAge: 3600000,
             secure: process.env.SERVER_MODE === 'production',
             sameSite: 'none',
-            domain: process.env.SERVER_MODE === 'production' ? process.env.CLIENT_PRODUCTION_URL : process.env.CLIENT_DEVELOPMENT_URL
         });
         return res.json({ message: 'Cookie value', data: {cookieValue} });
     }
