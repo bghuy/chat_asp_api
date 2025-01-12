@@ -53,16 +53,17 @@ export class AuthController {
     @UseGuards(LocalGuard)
     login(@Req() req: Request , @Res({ passthrough: true }) res: Response) {
         const {access_token, refresh_token} = req.user as {access_token: string, refresh_token: string};
-        // const refreshTokenExpiry = parseInt(process.env.REFRESH_TOKEN_EXPIRY || '0', 10);
-        // const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000
-        // res.cookie('refresh_token', refresh_token, {
-        //     httpOnly: true,
-        //     secure: process.env.SERVER_MODE === 'production',
-        //     maxAge: refreshTokenExpiry || sevenDaysInMs,
-        //     sameSite: process.env.SERVER_MODE === 'production' ? 'none' : 'lax',
-        // });
-        // console.log('Response Headers (Before Sending):', res.getHeaders());
-        return res.status(200).json({ message: 'Login successful', data: {access_token, refresh_token} });
+        const refreshTokenExpiry = parseInt(process.env.REFRESH_TOKEN_EXPIRY || '0', 10);
+        const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000
+        res.cookie('refresh_token', refresh_token, {
+            httpOnly: true,
+            secure: process.env.SERVER_MODE === 'production',
+            maxAge: refreshTokenExpiry || sevenDaysInMs,
+            sameSite: process.env.SERVER_MODE === 'production' ? 'none' : 'lax',
+            domain: process.env.SERVER_MODE === 'production' ? process.env.CLIENT_PRODUCTION_URL : process.env.CLIENT_DEVELOPMENT_URL
+        });
+        console.log('Response Headers (Before Sending):', res.getHeaders());
+        return res.status(200).json({ message: 'Login successful', data: {access_token} });
     } 
     @Post('register')
     @UsePipes(ValidationPipe)
@@ -109,7 +110,8 @@ export class AuthController {
             httpOnly: true,
             maxAge: 3600000,
             secure: process.env.SERVER_MODE === 'production',
-            sameSite: 'none'
+            sameSite: 'none',
+            domain: process.env.SERVER_MODE === 'production' ? process.env.CLIENT_PRODUCTION_URL : process.env.CLIENT_DEVELOPMENT_URL
         });
         return res.json({ message: 'Cookie value', data: {cookieValue} });
     }
