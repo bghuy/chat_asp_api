@@ -9,17 +9,11 @@ async function bootstrap() {
   const allowedOrigins = [process.env.CLIENT_PRODUCTION_URL, process.env.CLIENT_DEVELOPMENT_URL];
 
   app.enableCors({
-    origin: (origin, callback) => {
-      if (allowedOrigins.includes(origin) || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
-    preflightContinue: true,
-    allowedHeaders: '*'
+    preflightContinue: false,
+    allowedHeaders: ['Content-Type', 'Authorization']
   });
 //   app.use(cors({
 //     credentials: true,
